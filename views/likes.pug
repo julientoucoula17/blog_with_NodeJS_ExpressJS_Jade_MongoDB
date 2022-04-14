@@ -1,0 +1,20 @@
+extends layout
+
+block content
+
+  
+  h1 #{title}
+  ul.list-group
+      each like, i in likes
+        li.list-group-item
+          a.ui.negative.button.like-article(href='#',id=like.article)
+            i.heart.icon
+            | Like
+            a(href="/articles/"+like.article) http://localhost:3000/articles/#{like.article}
+            
+
+          
+    
+
+  script(src='/js/main.js')
+  

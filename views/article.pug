@@ -1,0 +1,124 @@
+extends layout
+
+block content
+  h1= article.title
+  if like == 1
+    a.ui.negative.button.like-article(href='#',id=article._id)
+      i.heart.icon
+      | Like
+  else if like == 0
+    a.ui.button.like-article(href='#',id=article._id)
+      i.heart.icon
+      | Like 
+    //- ui.red.button 
+    
+    //-   | Like
+  //- a.ui.labeled.button.like-article(href='#',id=article._id)
+  //-     .ui.button
+  //-       if like == 1  
+  //-         i.heart.icon(style='color:red;')
+  //-         |  Like
+  //-       else
+  //-         i.heart.icon
+  //-         |  Like 
+  
+  h4 Written by  #{article.author}
+  if article.visibility == 'hidden'
+    h6 Article is hidden.
+  //span= article.date
+  hr
+  h3 
+    article=article.body
+  br
+  
+  if user && (user.role == 'admin')
+    hr
+    a.ui.primary.button(href='/articles/edit/'+article._id) Edit
+    a.negative.ui.button.delete-article(href='#',id=article._id) Delete
+  script(src='/js/main.js')
+  
+
+  style.
+      #messages {
+      height: 300px;
+      }
+  body
+    hr
+    h1 
+      u Comments
+    .container
+      .row
+        .col-md-12
+          #status
+          #chat
+            
+            br
+            .card
+              #messages.card-block
+              for el,i in comment
+                .chat-message
+                  span #{el.name} : 
+                  span #{el.message}
+            
+            input#username.form-control(type='hidden', value=user.username,placeholder='Enter your name...')
+            input#article.form-control(type='hidden', value=article._id)
+            br
+            textarea#textarea.form-control(placeholder='Enter your message...')
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js')
+    script.
+      (function() {
+      var element = function(id) {
+      return document.getElementById(id);
+      }
+      var article = element('article');
+      var status = element('status');
+      var messages = element('messages');
+      var textarea = element('textarea');
+      var username = element('username');
+      var clearBtn = element('effacer');
+
+      var statusDefault = status.textContent;
+      var setStatus = function(s) {
+
+      status.textContent = s;
+      if (s !== statusDefault) {
+      var delay = setTimeout(function() {
+      setStatus(statusDefault);
+      }, 5000);
+      }
+      }
+
+      var socket = io.connect('http://localhost:5000');
+
+      if (socket !== undefined) {
+      console.log('Connecté');
+
+      socket.on('output', function(data) {
+
+      if (data.length) {
+      for (var x = 0; x < data.length; x++) {
+
+      var message = document.createElement('div');
+      message.setAttribute('class', 'chat-message');
+      message.textContent = data[x].name + ": " + data[x].message;
+      messages.appendChild(message);
+      messages.insertBefore(message, messages.firstChild);
+      }
+      }
+      });
+
+      textarea.addEventListener('keydown', function(event) {
+      if (event.which === 13 && event.shiftKey == false) {
+
+      socket.emit('input', {
+      name: username.value,
+      message: textarea.value,
+      article: article.value
+      });
+      event.preventDefault();
+      }
+      })
+  
+      }
+      })();
+

@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    h1 #{title}
+    br
+    form(method='POST', action='/articles/edit/'+article._id)
+      #form-group
+        label Title: 
+        input.form-control(name='title', type='text' value=article.title)
+      br
+      #form-group
+        label Author: 
+        input.form-control(name='author', type='text' value=article.author)
+      br
+      #form-group
+        label Body: 
+        textarea.form-control(name='body')=article.body
+      br
+      #form-group
+        select.ui.dropdown(name='visibility')
+          option(value=article.visibility) #{article.visibility}
+          option(value='visible') visible
+          option(value='hidden') hidden
+
+      br
+      input.btn.btn-primary.col-md-2(type='submit',value='Edit')

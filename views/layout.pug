@@ -1,0 +1,38 @@
+doctype html
+html
+  head
+    title Blog
+    link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
+    link(rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css')
+    link(rel='stylesheet' href='/css/style.css')
+  body
+
+    .ui.inverted.menu
+     .header.item Blog
+     a(href='http://localhost:3000/').item Articles
+     if user && (user.role == 'admin')
+       a(href='http://localhost:3000/articles/add').item Add article
+     if user
+       a(href='http://localhost:3000/likes').item Loved articles
+    
+     .right.menu
+        if user
+          a.item(href='/users/logout') Logout
+        else
+          
+          a.item(href='/users/register') Register 
+          a.item(href='/users/login') Login
+
+
+    .container
+      != messages('message', locals)
+      if errors
+        each error, i in errors
+          div(class="alert alert-danger") #{error.msg}
+            
+      block content
+      br
+      hr
+      footer
+        p Copyright &copy; 2019
+    //script(src='/js/main.js')

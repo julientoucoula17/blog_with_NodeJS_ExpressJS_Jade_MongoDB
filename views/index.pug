@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1 #{title}
+    
+      select.ui.dropdown.choice(style='float:right;',onchange='load(this.options[this.selectedIndex].value);')
+        option(value='', selected='') Order of publication 
+        option(value='1') Lastest
+        option(value='0') Oldest
+    
+    //- span(style="font-size:large;")
+    ul.list-group
+        each article, i in articles
+          li.list-group-item
+            a(href="/articles/"+article._id)=article.title
+    script(src='/js/main.js')
+            
