@@ -1,4 +1,4 @@
-# Blog built with NodeJS, ExpressJS, Jade and MongoDB
+# Blog built with NodeJS, ExpressJS, Jade and MongoDB 🌐
 
 The purpose of the blog is to communicate on its new products. This blog must manage two different roles: Administrator and Visitor.
 The administrator is the one who knows the products. He will create the different articles. And the visitors will see the articles and comment them.
